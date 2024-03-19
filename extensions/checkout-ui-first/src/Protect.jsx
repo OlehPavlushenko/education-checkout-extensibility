@@ -1,9 +1,9 @@
   import { useEffect, useState } from 'react';
   import {
+  useAppMetafields,
   useApi,
   useCartLines,
   useApplyCartLinesChange,
-  useAppMetafields,
   reactExtension,
   Pressable,
   Heading,
@@ -23,9 +23,11 @@ export default reactExtension(
 
 function Extension() {
 
-  
+  const { query, i18n } = useApi();
+  const cartLines = useCartLines()
+  const applyCartLinesChange = useApplyCartLinesChange()
+
   const [variantData, setVariantData] = useState("");
-  const [loading, setLoading] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   
   const metafieldsProduct = useAppMetafields({
@@ -40,9 +42,6 @@ function Extension() {
   
   const variantId = metafieldsProduct[0]?.metafield?.value;
 
-  const { query, i18n } = useApi();
-  const cartLines = useCartLines()
-  const applyCartLinesChange = useApplyCartLinesChange()
 
   useEffect(() => {
     if (variantId !== undefined) {
@@ -52,7 +51,6 @@ function Extension() {
   }, [variantId]);
 
   async function getVariantData() {
-    setLoading(true);
     try {
       const queryResult = await query(`{
         node(id:"${variantId}"){
@@ -83,8 +81,6 @@ function Extension() {
       }
     } catch (error) {
       console.error('Error fetching variant data:', error);
-    } finally {
-      setLoading(false);
     }
   }
   
@@ -113,9 +109,10 @@ function Extension() {
 
   }, [isSelected, variantId]);
 
-  if(!variantData) return
+  if(!variantData) return null;
 
   const renderPrice = i18n.formatCurrency(variantData.price.amount);
+  
 
   return (
     <>
