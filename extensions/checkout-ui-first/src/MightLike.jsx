@@ -8,7 +8,9 @@
   Button,
   Heading,
   Text,
-  InlineLayout,
+  Grid,
+  View,
+  BlockSpacer,
   Image,
   BlockStack,
   Divider,
@@ -139,15 +141,29 @@ function Extension() {
     <>
       <Divider />
       <BlockStack border="none" padding={['base', 'none']}>
-        <Heading level="2">You might also like</Heading>
+        <Heading level="1">You might also like</Heading>
       </BlockStack>
-      <ProductOffer
-        data={productsOnOffer[0]}
-        i18n={i18n}
-        adding={adding}
-        handleAddToCart={handleAddToCart}
-      />
+      <Grid
+          columns={['50%', '50%']}
+          rows={['auto', 'auto']}
+          spacing='loose'
+          overflow="visible"
+          blockAlignment='start'
+        >
+        {productsOnOffer.slice(0, 2).map((product, index) => (
+          <ProductOffer
+            key={index}
+            data={product}
+            i18n={i18n}
+            adding={adding}
+            handleAddToCart={handleAddToCart}
+          />
+        ))}
+      </Grid>
+      <BlockSpacer spacing="loose" />
       {showError && <ErrorBanner />}
+      <Divider />
+      
     </>
   );
 }
@@ -166,37 +182,49 @@ function ProductOffer({ data, i18n, adding, handleAddToCart}) {
   const imageAlt = data.image.alt || data.product.featuredImage.alt
 
   return (
-      <BlockStack spacing='loose'>
-        <InlineLayout
-          spacing='base'
-          columns={[64, 'fill', 'auto']}
-          blockAlignment='center'
-        >
-          <Image
-            border='base'
-            borderWidth='base'
-            borderRadius='loose'
-            source={imageUrl}
-            description={data.product.title}
-            aspectRatio={1}
-            accessibilityDescription={ imageAlt }
-          />
-          <BlockStack spacing='none'>
-            <Text size='medium' emphasis='strong'>
-              {data.product.title}
-            </Text>
-            <Text appearance='subdued'>{renderPrice}</Text>
-          </BlockStack>
-          <Button
-            kind='secondary'
-            loading={adding}
-            accessibilityLabel={`Add ${data.product.title} to cart`}
-            onPress={() => handleAddToCart(data.id)}
-          >
-            Add
-          </Button>
-        </InlineLayout>
+    <View>
+      <BlockStack border="none" padding="none">
+        <Image
+          border='base'
+          borderWidth='base'
+          borderRadius='loose'
+          source={imageUrl}
+          description={data.product.title}
+          aspectRatio={1}
+          accessibilityDescription={ imageAlt }
+        />
       </BlockStack>
+      <BlockSpacer spacing="base" />
+      <BlockStack border="none" padding="none" spacing='none'>
+        <Text size='medium' emphasis='strong'>
+          {data.product.title}
+        </Text>
+        <Text appearance='subdued'>{renderPrice}</Text>
+      </BlockStack>
+      <BlockSpacer spacing="base" />
+      <BlockStack border="none" padding="none">
+      {data.availableForSale ? (
+        <Button
+          kind='primary'
+          loading={adding}
+          accessibilityLabel={`Add ${data.product.title} to cart`}
+          onPress={() => handleAddToCart(data.id)}
+        >
+          Add to Cart
+        </Button>
+      ) : (
+        <Button
+          kind='secondary'
+          appearance='monochrome'
+          disabled="true"
+          accessibilityLabel={`Out of Stock`}
+        >
+          Out of Stock
+        </Button>
+        
+      )}
+      </BlockStack>
+    </View >
   );
 }
 
