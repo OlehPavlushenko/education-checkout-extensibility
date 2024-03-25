@@ -131,7 +131,7 @@ function Extension() {
 
   const productsOnOffer = getProductsOnOffer(cartLines, products);
 
-  console.log("productsOnOffer", productsOnOffer)
+  //console.log("productsOnOffer", productsOnOffer)
 
   if (!productsOnOffer.length) {
     return null;
