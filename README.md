@@ -1,3 +1,5 @@
+example: ![education-checkout-extensibility](https://github.com/OlehPavlushenko/education-checkout-extensibility/assets/59625847/2643364c-e899-45ae-b5a9-7edbed366b0d)
+
 # Shopify App Template - None (app with extensions only)
 
 This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) that includes no app home UI. It contains the basics for building a Shopify app that uses only app extensions.
